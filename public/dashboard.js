@@ -22,7 +22,6 @@ if (!token) {
 
 const findMatchButton = document.getElementById("findMatchButton");
 findMatchButton.addEventListener("click", () => {
-  // Check if the WebSocket is already connected
   if (!socket || socket.readyState !== WebSocket.OPEN) {
     const WEBSOCKET_URL = "ws://localhost:8080";
     socket = new WebSocket(WEBSOCKET_URL, token);

@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
   
-  // Handle login form submission
   document.getElementById("loginForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     const email = document.getElementById("email").value;
@@ -50,10 +49,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
   
-  // Handle registration form submission
   document.getElementById("signupForm").addEventListener("submit", async (event) => {
     event.preventDefault();
-    const username = document.getElementById("username").value; // Get username
+    const username = document.getElementById("username").value;
     const email = document.getElementById("regEmail").value;
     const password = document.getElementById("regPassword").value;
   
@@ -61,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }), // Include username
+        body: JSON.stringify({ username, email, password }),
       });
   
       const data = await response.json();

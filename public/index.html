@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Registration</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <div id="authForm" class="form-container">
+      <h2>Login</h2>
+      <form id="loginForm" class="form">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit" class="btn">Login</button>
+      </form>
+      <p>Don't have an account? <a href="javascript:void(0);" onclick="toggleAuthForm()">Register</a></p>
+    </div>
+
+    <div id="registerForm" class="form-container" style="display: none;">
+      <h2>Register</h2>
+      <form id="signupForm" class="form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="email" id="regEmail" placeholder="Email" required>
+        <input type="password" id="regPassword" placeholder="Password" required>
+        <button type="submit" class="btn">Register</button>
+      </form>
+      <p>Already have an account? <a href="javascript:void(0);" onclick="toggleAuthForm()">Login</a></p>
+    </div>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

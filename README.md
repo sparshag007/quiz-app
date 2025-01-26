@@ -1,4 +1,5 @@
-# Jumbo Test
+# Quiz App
+Realtime quiz game
 
 ## Prerequisites
 
@@ -6,7 +7,6 @@
 - Docker (for containerization)
 - Kubernetes (for deployment on Minikube or cloud)
 - PostgreSQL (for the database)
-- Redis (for caching)
 - Sequelize (for ORM)
 
 ## Setup Instructions
@@ -27,6 +27,7 @@ npm install
 ### 3. Database Configuration
 
 Make sure you have PostgreSQL running locally or through Docker. Update the config/config.json file with the correct database configuration.
+Add DATABASE_URL in .env file
 
 ### 4. Run the Application Locally
 
@@ -62,4 +63,11 @@ Undo Migration
 npm run undo-migration
 ```
 
+### 6. Dockerizing and deploying to K8
+
+Building the docker image
+```bash
+docker build -t quiz-app .
+docker build --no-cache -t quiz-app .
+```
 

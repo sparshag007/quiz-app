@@ -4,8 +4,6 @@ import express from "express";
 import cors from 'cors';
 import sequelize from './database/sequelize';
 import authRoutes from "./routes/authRoutes";
-import './utils/redisClient';
-import RabbitMQ from "./rabbitmq/RabbitMQ";
 import TaskScheduler from "./crons/scheduleTask";
 import log from "./utils/logger";
 import { authenticateToken } from './middlewares/auth';
@@ -28,7 +26,6 @@ app.use(cors());
     process.exit(1);
   }
 
-  await RabbitMQ.connect(RABBITMQ_URL);
   TaskScheduler.start();
 
   initializeWebSocketServer();

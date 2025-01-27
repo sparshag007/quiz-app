@@ -8,10 +8,10 @@ import TaskScheduler from "./crons/scheduleTask";
 import log from "./utils/logger";
 import { authenticateToken } from './middlewares/auth';
 import { initializeWebSocketServer } from './websocket';
+import { runMigrations } from './database/migrationHelper';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const RABBITMQ_URL = process.env.RABBITMQ_URL || 'amqp://localhost';
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -20,7 +20,8 @@ app.use(cors());
 (async () => {
   try {
     await sequelize.authenticate();
-    log.info('Database connected successfully');
+    log.info('Database connection successful');
+    await runMigrations();
   } catch (error) {
     log.error('Unable to connect to the database:', error);
     process.exit(1);

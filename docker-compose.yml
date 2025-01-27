@@ -21,24 +21,6 @@ services:
     networks:
       - app-network
 
-  websocket:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: websocket-container
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      SSL: true
-    env_file:
-      - .env
-    ports:
-      - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy  # Wait until db is healthy
-    networks:
-      - app-network
-
   db:
     image: postgres:15
     container_name: postgres-container

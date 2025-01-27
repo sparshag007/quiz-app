@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'; 
 dotenv.config();
 import express from "express";
+import http from 'http';
 import cors from 'cors';
 import sequelize from './database/sequelize';
 import authRoutes from "./routes/authRoutes";
@@ -12,6 +13,8 @@ import { runMigrations } from './database/migrationHelper';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const server = http.createServer(app);
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -29,14 +32,14 @@ app.use(cors());
 
   TaskScheduler.start();
 
-  initializeWebSocketServer();
+  initializeWebSocketServer(server);
 
   app.use('/api/auth', authRoutes);
   app.get('/dashboard', authenticateToken, (req, res) => {
     res.sendFile('dashboard.html', { root: 'public' });
   });
 
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     log.info(`Application is starting up at PORT ${PORT}`);
   });
 })();

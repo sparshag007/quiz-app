@@ -1,10 +1,11 @@
-import { WebSocketServer, WebSocket } from 'ws';
-import log from './utils/logger';
-import { verifyToken } from './utils/jwtUtils';
+import { Server as WebSocketServer, WebSocket } from 'ws';
+import http from 'http';
 import { getQuestions } from './database/queries/questionQueries';
 import { Question } from './database/models/Question';
 import { storePlayerAnswers } from './database/queries/playerAnswersQueries';
 import { createGame, updateGameWinner } from './database/queries/gameQueries';
+import log from './utils/logger';
+import { verifyToken } from './utils/jwtUtils';
 
 interface WebSocketMessage {
   type: string;
@@ -14,42 +15,42 @@ interface WebSocketMessage {
 const activeGames = new Map<string, { players: any[]}>();
 const connectedUsers = new Map<string, WebSocket>();
 
-export function initializeWebSocketServer(): void {
-  const WEBSOCKET_PORT = process.env.WEBSOCKET_PORT ? parseInt(process.env.WEBSOCKET_PORT, 10) : 8080;
-  const wss = new WebSocketServer({ port: WEBSOCKET_PORT });
+export function initializeWebSocketServer(server: http.Server): void {
+  const wss = new WebSocketServer({ server }); // Attach WebSocket to the HTTP server
 
-  log.info(`WebSocket server started on port ${WEBSOCKET_PORT}`);
+  log.info(`WebSocket server integrated with HTTP server`);
 
-  wss.on('connection', (ws: WebSocket, req: any) => {
+  wss.on('connection', (ws, req) => {
     const token = req.headers['sec-websocket-protocol'];
 
     if (!token) {
-        ws.close(4001, 'Token is required');
-        return;
+      ws.close(4001, 'Token is required');
+      return;
     }
 
     try {
-        const decoded = verifyToken(token) as { email: string; id: string };
-        const { email, id } = decoded;
-        log.info(`New WebSocket connection established with client: ${email}`);
-        connectedUsers.set(id, ws);
-        ws.on('message', (message: string | Buffer) => {
-          try {
-            const parsedMessage: WebSocketMessage = JSON.parse(message.toString());
-            handleWebSocketMessage(ws, parsedMessage);
-          } catch (error) {
-            log.error('Invalid WebSocket message format:', error);
-            ws.send(JSON.stringify({ type: 'error', message: 'Invalid message format' }));
-          }
-        });
-  
-        ws.on('close', () => {
-          handleWebSocketDisconnection(ws, id);
-          log.info(`WebSocket connection closed for client: ${email}`);
-        });
+      const decoded = verifyToken(token) as { email: string; id: string };
+      const { email, id } = decoded;
+      log.info(`New WebSocket connection established with client: ${email}`);
+      connectedUsers.set(id, ws);
+
+      ws.on('message', (message: string | Buffer) => {
+        try {
+          const parsedMessage: WebSocketMessage = JSON.parse(message.toString());
+          handleWebSocketMessage(ws, parsedMessage);
+        } catch (error) {
+          log.error('Invalid WebSocket message format:', error);
+          ws.send(JSON.stringify({ type: 'error', message: 'Invalid message format' }));
+        }
+      });
+
+      ws.on('close', () => {
+        handleWebSocketDisconnection(ws, id);
+        log.info(`WebSocket connection closed for client: ${email}`);
+      });
     } catch (error) {
-        log.error('WebSocket connection rejected: Invalid token', error);
-        ws.close(4002, 'Invalid token');
+      log.error('WebSocket connection rejected: Invalid token', error);
+      ws.close(4002, 'Invalid token');
     }
   });
 }

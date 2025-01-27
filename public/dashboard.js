@@ -23,7 +23,7 @@ if (!token) {
 const findMatchButton = document.getElementById("findMatchButton");
 findMatchButton.addEventListener("click", () => {
   if (!socket || socket.readyState !== WebSocket.OPEN) {
-    const WEBSOCKET_URL = "wss://https://quiz-app-5ms3.onrender.com";
+    const WEBSOCKET_URL = "wss://quiz-app-5ms3.onrender.com";
     socket = new WebSocket(WEBSOCKET_URL, token);
     socket.onopen = () => {
       console.log(`client: Connected to WebSocket server : ${userEmail}`);

@@ -1,8 +1,11 @@
+import { Sequelize } from 'sequelize';
 import { Question } from '../models/Question';
 
 async function getQuestions(limit?: number) {
   try {
-    const queryOptions: any = {};
+    const queryOptions: any = {
+      order: Sequelize.literal('RANDOM()')
+    };
 
     if (limit) {
       queryOptions.limit = limit;

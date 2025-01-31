@@ -71,3 +71,10 @@ docker build -t quiz-app .
 docker build --no-cache -t quiz-app .
 ```
 
+```bash
+kubectl apply -f kube.yml
+kubectl port-forward svc/node-service 3000:3000 # if external port not provisioned use port-forwarding to run locally
+```
+
+Access the app at http://localhost:3000/
+

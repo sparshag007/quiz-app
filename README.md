@@ -67,12 +67,12 @@ npm run undo-migration
 
 Building the docker image
 ```bash
-docker build -t quiz-app .
 docker build --no-cache -t quiz-app .
 ```
 
+Running on K8s cluster locally:
 ```bash
-kubectl apply -f kube.yml
+kubectl apply -f deployment/kube.yml
 kubectl port-forward svc/node-service 3000:3000 # if external port not provisioned use port-forwarding to run locally
 ```
 
